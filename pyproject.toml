@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling>=1.26.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "imagencli"
+version = "0.1.0"
+description = "CLI for OpenRouter-based image generation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.3.0",
+]
+
+[project.scripts]
+imagen = "imagencli.cli:main"
