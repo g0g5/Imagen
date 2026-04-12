@@ -19,7 +19,8 @@ imagencli/
 \- pyproject.toml             # Package metadata, dependencies, and `imagen` script
 
 ## Development Guide
-- Build/install (editable): `python -m pip install -e .[test]`
-- Run tests: `pytest`
-- Run typecheck-level sanity check: `python -m compileall imagencli tests`
-- Verify changes quickly: `pytest && python -m imagencli --help`
+- Install CLI tool: `uv tool install .`
+- Sync dev environment: `uv sync --dev`
+- Run tests: `uv run pytest`
+- Run typecheck-level sanity check: `uv run python -m compileall imagencli tests`
+- Verify changes quickly: `uv run pytest && uv run python -m imagencli --help`

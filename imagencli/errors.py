@@ -19,3 +19,7 @@ class ProviderError(ImagenError):
 
 class ResponseFormatError(ImagenError):
     """Raised when provider response payload is malformed."""
+
+
+class InstallError(ImagenError):
+    """Raised when local installation tasks fail."""

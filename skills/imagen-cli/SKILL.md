@@ -23,7 +23,7 @@ export OPENROUTER_API_KEY="your_api_key_here"
 ```bash
 imagen --prompt "A cinematic sunset over mountains"
 imagen --prompt "Blend these references" --image ./a.png ./b.jpg
-imagen --prompt "A magazine cover photo" --ratio 4:5 --resolution 2K --output_dir ./outputs
+imagen --prompt "A magazine cover photo" --ratio 4:5 --resolution 2K --output_dir ./outputs --model openai/gpt-image-1.5
 imagen generate --prompt "A watercolor fox in a forest"
 ```
 

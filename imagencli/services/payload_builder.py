@@ -6,11 +6,13 @@ from imagencli.models.request import GenerateRequest
 
 
 def build_openrouter_payload(
-    request: GenerateRequest, image_data_urls: list[str]
+    request: GenerateRequest,
+    image_data_urls: list[str],
+    modalities: list[str],
 ) -> dict:
     payload: dict[str, object] = {
         "model": request.model,
-        "modalities": ["image", "text"],
+        "modalities": modalities,
     }
 
     if image_data_urls:

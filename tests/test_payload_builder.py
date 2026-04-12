@@ -16,7 +16,11 @@ def test_build_payload_text_only_with_image_config() -> None:
         output_dir=Path("./outputs"),
     )
 
-    payload = build_openrouter_payload(request, image_data_urls=[])
+    payload = build_openrouter_payload(
+        request,
+        image_data_urls=[],
+        modalities=["image", "text"],
+    )
 
     assert payload["model"] == request.model
     assert payload["modalities"] == ["image", "text"]
@@ -33,10 +37,15 @@ def test_build_payload_multi_image_orders_text_first() -> None:
     )
     data_urls = ["data:image/png;base64,aaa", "data:image/jpeg;base64,bbb"]
 
-    payload = build_openrouter_payload(request, image_data_urls=data_urls)
+    payload = build_openrouter_payload(
+        request,
+        image_data_urls=data_urls,
+        modalities=["image"],
+    )
 
     content = payload["messages"][0]["content"]
     assert content[0] == {"type": "text", "text": request.prompt}
     assert content[1] == {"type": "image_url", "image_url": {"url": data_urls[0]}}
     assert content[2] == {"type": "image_url", "image_url": {"url": data_urls[1]}}
+    assert payload["modalities"] == ["image"]
     assert "image_config" not in payload

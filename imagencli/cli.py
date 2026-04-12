@@ -8,10 +8,11 @@ from sys import argv as sys_argv, stderr
 
 from imagencli.commands.auth import run_auth
 from imagencli.commands.generate import run_generate
+from imagencli.commands.install import run_install
 from imagencli.constants import DEFAULT_MODEL
 from imagencli.errors import ImagenError
 
-_KNOWN_COMMANDS = {"generate", "auth"}
+_KNOWN_COMMANDS = {"generate", "auth", "install"}
 
 
 def build_parser() -> ArgumentParser:
@@ -31,6 +32,16 @@ def build_parser() -> ArgumentParser:
     generate_parser.add_argument("--output_dir", default="./outputs")
 
     subparsers.add_parser("auth", help="Manage provider authentication (stub)")
+
+    install_parser = subparsers.add_parser(
+        "install", help="Install local integrations such as Claude skills"
+    )
+    install_parser.add_argument(
+        "--skills",
+        action="store_true",
+        required=True,
+        help="Install the bundled imagen-cli Claude skill",
+    )
     return parser
 
 
@@ -47,6 +58,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         args = parse_args(argv)
         if args.command == "auth":
             return run_auth()
+        if args.command == "install":
+            return run_install(args)
         return run_generate(args)
     except ImagenError as exc:
         print(f"Error: {exc}", file=stderr)

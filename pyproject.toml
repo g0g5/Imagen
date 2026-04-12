@@ -19,3 +19,18 @@ test = [
 
 [project.scripts]
 imagen = "imagencli.cli:main"
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "/imagencli",
+    "/skills",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/imagencli",
+    "/skills",
+    "/tests",
+    "/README.md",
+    "/pyproject.toml",
+]

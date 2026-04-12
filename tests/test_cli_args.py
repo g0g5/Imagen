@@ -48,6 +48,18 @@ def test_parse_args_auth_subcommand() -> None:
     assert args.command == "auth"
 
 
+def test_parse_args_install_subcommand() -> None:
+    args = parse_args(["install", "--skills"])
+
+    assert args.command == "install"
+    assert args.skills is True
+
+
+def test_parse_args_install_requires_skills_flag() -> None:
+    with pytest.raises(SystemExit):
+        parse_args(["install"])
+
+
 def test_parse_args_rejects_missing_prompt() -> None:
     with pytest.raises(SystemExit):
         parse_args([])

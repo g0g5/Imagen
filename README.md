@@ -1,17 +1,17 @@
-# Imagen CLI OpenRouter MVP
+# Imagen CLI
 
 `imagen` is a lightweight Python CLI for OpenRouter image generation.
 
 ## Installation
 
 ```bash
-python -m pip install -e .
+uv tool install .
 ```
 
 To include test tooling:
 
 ```bash
-python -m pip install -e .[test]
+uv sync --dev
 ```
 
 ## Authentication
@@ -48,6 +48,12 @@ Auth stub command:
 imagen auth
 ```
 
+Install the bundled Claude skill:
+
+```bash
+imagen install --skills
+```
+
 `imagen auth` is currently a stub and does not store credentials yet. This MVP uses `OPENROUTER_API_KEY` only.
 
 ## Supported Values
@@ -65,5 +71,17 @@ Resolutions:
 ## Run Tests
 
 ```bash
-pytest
+uv run pytest
+```
+
+## Development
+
+```bash
+uv sync --dev
+```
+
+Run the CLI locally:
+
+```bash
+uv run imagen --help
 ```
