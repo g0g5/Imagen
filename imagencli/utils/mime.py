@@ -8,9 +8,16 @@ from pathlib import Path
 from imagencli.constants import SUPPORTED_IMAGE_MIME_TYPES
 
 
+_MIME_TYPE_ALIASES = {
+    "application/jpg": "image/jpeg",
+}
+
+
 def detect_mime_type(path: Path) -> str | None:
     mime_type, _ = guess_type(path.name)
-    return mime_type
+    if mime_type is None:
+        return None
+    return _MIME_TYPE_ALIASES.get(mime_type, mime_type)
 
 
 def is_supported_image_mime_type(mime_type: str | None) -> bool:
