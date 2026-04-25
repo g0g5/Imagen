@@ -11,6 +11,7 @@ def test_parse_args_defaults_without_subcommand() -> None:
 
     assert args.command == "generate"
     assert args.prompt == "A cinematic sunset over mountains"
+    assert args.prompt_file is None
     assert args.image == []
     assert args.model == DEFAULT_MODEL
     assert args.ratio is None
@@ -42,6 +43,14 @@ def test_parse_args_accepts_multi_image_values() -> None:
     assert args.output_dir == "./custom-out"
 
 
+def test_parse_args_accepts_prompt_file_without_subcommand() -> None:
+    args = parse_args(["--prompt-file", "./prompt.txt"])
+
+    assert args.command == "generate"
+    assert args.prompt is None
+    assert args.prompt_file == "./prompt.txt"
+
+
 def test_parse_args_auth_subcommand() -> None:
     args = parse_args(["auth"])
 
@@ -60,6 +69,9 @@ def test_parse_args_install_requires_skills_flag() -> None:
         parse_args(["install"])
 
 
-def test_parse_args_rejects_missing_prompt() -> None:
-    with pytest.raises(SystemExit):
-        parse_args([])
+def test_parse_args_allows_prompt_to_be_validated_later() -> None:
+    args = parse_args([])
+
+    assert args.command == "generate"
+    assert args.prompt is None
+    assert args.prompt_file is None

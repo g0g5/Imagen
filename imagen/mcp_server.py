@@ -39,7 +39,8 @@ mcp = FastMCP(
     timeout=180.0,
 )
 def generate_image(
-    prompt: str,
+    prompt: str | None = None,
+    prompt_file: str | None = None,
     image: list[str] | None = None,
     model: str = DEFAULT_MODEL,
     ratio: str | None = None,
@@ -50,6 +51,7 @@ def generate_image(
     try:
         saved_paths = generate_and_save_images(
             prompt=prompt,
+            prompt_file=prompt_file,
             image_paths=image,
             model=model,
             ratio=ratio,

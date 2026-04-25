@@ -35,6 +35,7 @@ def test_generate_image_returns_structured_result(
 
     assert captured_kwargs == {
         "prompt": "Blend these references",
+        "prompt_file": None,
         "image_paths": ["./a.png", "./b.jpg"],
         "model": "sourceful/riverflow-v2-pro",
         "ratio": "16:9",
@@ -64,6 +65,7 @@ def test_generate_image_uses_cli_defaults(monkeypatch: pytest.MonkeyPatch) -> No
 
     assert captured_kwargs == {
         "prompt": "A cinematic sunset over mountains",
+        "prompt_file": None,
         "image_paths": None,
         "model": DEFAULT_MODEL,
         "ratio": None,
@@ -73,6 +75,45 @@ def test_generate_image_uses_cli_defaults(monkeypatch: pytest.MonkeyPatch) -> No
     assert result.count == 0
     assert result.saved_paths == []
     assert result.message == "No images were saved."
+
+
+def test_generate_image_passes_prompt_file_and_ignores_prompt_priority(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured_kwargs: dict[str, object] = {}
+
+    def fake_generate_and_save_images(**kwargs: object) -> list[Path]:
+        captured_kwargs.update(kwargs)
+        return []
+
+    monkeypatch.setattr(
+        mcp_server, "generate_and_save_images", fake_generate_and_save_images
+    )
+
+    result = mcp_server.generate_image(
+        prompt="ignored prompt",
+        prompt_file="./prompt.txt",
+    )
+
+    assert captured_kwargs["prompt"] == "ignored prompt"
+    assert captured_kwargs["prompt_file"] == "./prompt.txt"
+    assert result.count == 0
+
+
+def test_generate_image_converts_empty_prompt_file_error(tmp_path: Path) -> None:
+    prompt_file = tmp_path / "prompt.txt"
+    prompt_file.write_text("\n", encoding="utf-8")
+
+    with pytest.raises(ToolError, match="Prompt file must be non-empty"):
+        mcp_server.generate_image(prompt_file=str(prompt_file))
+
+
+def test_generate_image_converts_unsupported_prompt_file_type(tmp_path: Path) -> None:
+    prompt_file = tmp_path / "prompt.md"
+    prompt_file.write_text("a cat", encoding="utf-8")
+
+    with pytest.raises(ToolError, match="Unsupported prompt file type"):
+        mcp_server.generate_image(prompt_file=str(prompt_file))
 
 
 def test_generate_image_converts_imagen_errors(

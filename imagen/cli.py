@@ -24,7 +24,8 @@ def build_parser() -> ArgumentParser:
     generate_parser = subparsers.add_parser(
         "generate", help="Generate images using OpenRouter"
     )
-    generate_parser.add_argument("--prompt", required=True)
+    generate_parser.add_argument("--prompt")
+    generate_parser.add_argument("--prompt-file")
     generate_parser.add_argument("--image", nargs="+", default=[])
     generate_parser.add_argument("--model", default=DEFAULT_MODEL)
     generate_parser.add_argument("--ratio")

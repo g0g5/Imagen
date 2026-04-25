@@ -52,12 +52,120 @@ def test_main_generate_prints_saved_paths(
     assert f"- {saved_path}" in captured.out
 
 
+def test_main_generate_passes_prompt_file(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    prompt_file = tmp_path / "prompt.txt"
+    prompt_file.write_text("a cat from a file", encoding="utf-8")
+    captured_kwargs: dict[str, object] = {}
+
+    def fake_generate_and_save_images(**kwargs: object) -> list[Path]:
+        captured_kwargs.update(kwargs)
+        return []
+
+    monkeypatch.setattr(
+        generate_command, "generate_and_save_images", fake_generate_and_save_images
+    )
+
+    exit_code = main(["--prompt-file", str(prompt_file)])
+
+    assert exit_code == 0
+    assert captured_kwargs["prompt"] is None
+    assert captured_kwargs["prompt_file"] == str(prompt_file)
+
+
 def test_build_generate_request_rejects_missing_image_path(tmp_path: Path) -> None:
     missing_path = tmp_path / "does-not-exist.png"
     with pytest.raises(ValidationError, match="Image file does not exist"):
         build_generate_request(
             prompt="a cat",
             image_paths=[str(missing_path)],
+            model=DEFAULT_MODEL,
+            ratio=None,
+            resolution=None,
+            output_dir="./outputs",
+        )
+
+
+def test_build_generate_request_reads_prompt_file_and_ignores_prompt(
+    tmp_path: Path,
+) -> None:
+    prompt_file = tmp_path / "prompt.txt"
+    prompt_file.write_text("file prompt\n", encoding="utf-8")
+
+    request = build_generate_request(
+        prompt="ignored prompt",
+        prompt_file=str(prompt_file),
+        image_paths=None,
+        model=DEFAULT_MODEL,
+        ratio=None,
+        resolution=None,
+        output_dir="./outputs",
+    )
+
+    assert request.prompt == "file prompt\n"
+
+
+def test_build_generate_request_reads_json_prompt_file_as_text(tmp_path: Path) -> None:
+    prompt_file = tmp_path / "prompt.json"
+    prompt_file.write_text('{"prompt": "a cat"}', encoding="utf-8")
+
+    request = build_generate_request(
+        prompt=None,
+        prompt_file=str(prompt_file),
+        image_paths=None,
+        model=DEFAULT_MODEL,
+        ratio=None,
+        resolution=None,
+        output_dir="./outputs",
+    )
+
+    assert request.prompt == '{"prompt": "a cat"}'
+
+
+def test_build_generate_request_rejects_empty_prompt_file(tmp_path: Path) -> None:
+    prompt_file = tmp_path / "prompt.txt"
+    prompt_file.write_text("  \n", encoding="utf-8")
+
+    with pytest.raises(ValidationError, match="Prompt file must be non-empty"):
+        build_generate_request(
+            prompt=None,
+            prompt_file=str(prompt_file),
+            image_paths=None,
+            model=DEFAULT_MODEL,
+            ratio=None,
+            resolution=None,
+            output_dir="./outputs",
+        )
+
+
+def test_build_generate_request_rejects_unsupported_prompt_file_type(
+    tmp_path: Path,
+) -> None:
+    prompt_file = tmp_path / "prompt.md"
+    prompt_file.write_text("a cat", encoding="utf-8")
+
+    with pytest.raises(ValidationError, match="Unsupported prompt file type"):
+        build_generate_request(
+            prompt=None,
+            prompt_file=str(prompt_file),
+            image_paths=None,
+            model=DEFAULT_MODEL,
+            ratio=None,
+            resolution=None,
+            output_dir="./outputs",
+        )
+
+
+def test_build_generate_request_rejects_missing_prompt_file(tmp_path: Path) -> None:
+    prompt_file = tmp_path / "missing.txt"
+
+    with pytest.raises(ValidationError, match="Prompt file does not exist"):
+        build_generate_request(
+            prompt=None,
+            prompt_file=str(prompt_file),
+            image_paths=None,
             model=DEFAULT_MODEL,
             ratio=None,
             resolution=None,

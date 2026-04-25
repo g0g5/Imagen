@@ -13,14 +13,14 @@ from imagen.validation import build_generate_request
 
 def generate_and_save_images(
     *,
-    prompt: str,
+    prompt: str | None,
     image_paths: Sequence[str] | None,
     model: str,
     ratio: str | None,
     resolution: str | None,
     output_dir: str,
+    prompt_file: str | None = None,
 ) -> list[Path]:
-    config = load_config()
     request = build_generate_request(
         prompt=prompt,
         image_paths=image_paths,
@@ -28,7 +28,9 @@ def generate_and_save_images(
         ratio=ratio,
         resolution=resolution,
         output_dir=output_dir,
+        prompt_file=prompt_file,
     )
+    config = load_config()
     provider = OpenRouterProvider(api_key=config.openrouter_api_key)
     response = provider.generate(request)
     return save_generated_images(response.images, request.output_dir)

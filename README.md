@@ -36,6 +36,12 @@ Text-to-image:
 imagen --prompt "A cinematic sunset over mountains"
 ```
 
+Text-to-image from a prompt file:
+
+```bash
+imagen --prompt-file ./prompt.txt
+```
+
 Image-to-image with multiple inputs:
 
 ```bash
@@ -63,11 +69,17 @@ imagen install --skills
 The tool uses the same options as the CLI:
 
 - `prompt` maps to `--prompt`
+- `prompt_file` maps to `--prompt-file`
 - `image` maps to `--image`
 - `model` maps to `--model`
 - `ratio` maps to `--ratio`
 - `resolution` maps to `--resolution`
 - `output_dir` maps to `--output_dir`
+
+`prompt_file` supports `.txt` and `.json` files only. Files are read as UTF-8
+text, including `.json` files, and are not parsed or semantically validated.
+When `prompt_file` is provided, it takes priority over `prompt`. Prompt file
+content must be non-empty.
 
 Example MCP client configuration:
 

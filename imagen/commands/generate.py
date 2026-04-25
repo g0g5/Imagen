@@ -11,6 +11,7 @@ from imagen.utils.output import format_saved_image_paths
 def run_generate(args: Namespace) -> int:
     saved_paths = generate_and_save_images(
         prompt=args.prompt,
+        prompt_file=args.prompt_file,
         image_paths=args.image,
         model=args.model,
         ratio=args.ratio,

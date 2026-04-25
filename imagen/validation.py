@@ -11,12 +11,41 @@ from imagen.models.request import GenerateRequest
 from imagen.utils.mime import detect_mime_type, is_supported_image_mime_type
 from imagen.utils.paths import normalize_path
 
+_SUPPORTED_PROMPT_FILE_EXTENSIONS = {".json", ".txt"}
 
-def validate_prompt(prompt: str) -> str:
-    normalized = prompt.strip()
+
+def validate_prompt(prompt: str | None) -> str:
+    normalized = (prompt or "").strip()
     if not normalized:
         raise ValidationError("Prompt must be non-empty.")
     return normalized
+
+
+def read_prompt_file(prompt_file: str) -> str:
+    path = normalize_path(prompt_file)
+    if path.suffix.lower() not in _SUPPORTED_PROMPT_FILE_EXTENSIONS:
+        allowed = ", ".join(sorted(_SUPPORTED_PROMPT_FILE_EXTENSIONS))
+        raise ValidationError(
+            f"Unsupported prompt file type for '{prompt_file}'. "
+            f"Supported extensions: {allowed}."
+        )
+    if not path.exists():
+        raise ValidationError(f"Prompt file does not exist: {prompt_file}")
+    if not path.is_file():
+        raise ValidationError(f"Prompt file path is not a file: {prompt_file}")
+    try:
+        content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        raise ValidationError(f"Could not read prompt file '{prompt_file}': {exc}") from exc
+    if not content.strip():
+        raise ValidationError("Prompt file must be non-empty.")
+    return content
+
+
+def resolve_prompt(prompt: str | None, prompt_file: str | None) -> str:
+    if prompt_file is not None:
+        return read_prompt_file(prompt_file)
+    return validate_prompt(prompt)
 
 
 def validate_ratio(model: str, ratio: str | None) -> str | None:
@@ -72,15 +101,16 @@ def validate_image_paths(image_paths: Sequence[str] | None) -> list[Path]:
 
 def build_generate_request(
     *,
-    prompt: str,
+    prompt: str | None,
     image_paths: Sequence[str] | None,
     model: str,
     ratio: str | None,
     resolution: str | None,
     output_dir: str,
+    prompt_file: str | None = None,
 ) -> GenerateRequest:
     return GenerateRequest(
-        prompt=validate_prompt(prompt),
+        prompt=resolve_prompt(prompt, prompt_file),
         image_paths=validate_image_paths(image_paths),
         model=model,
         ratio=validate_ratio(model, ratio),
