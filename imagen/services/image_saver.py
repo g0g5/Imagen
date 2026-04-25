@@ -6,8 +6,8 @@ import base64
 from datetime import datetime
 from pathlib import Path
 
-from imagencli.errors import ResponseFormatError
-from imagencli.models.response import GeneratedImage
+from imagen.errors import ResponseFormatError
+from imagen.models.response import GeneratedImage
 
 _MIME_EXTENSION_MAP = {
     "image/png": ".png",

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from imagencli.constants import MODEL_CAPABILITIES
+from imagen.constants import MODEL_CAPABILITIES
 
 
 def get_model_capabilities(model: str) -> dict[str, set[str]]:

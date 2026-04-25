@@ -3,7 +3,7 @@ requires = ["hatchling>=1.26.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "imagencli"
+name = "imagen"
 version = "0.1.0"
 description = "CLI for OpenRouter-based image generation"
 readme = "README.md"
@@ -19,18 +19,18 @@ test = [
 ]
 
 [project.scripts]
-imagen = "imagencli.cli:main"
-imagen-mcp = "imagencli.mcp_server:main"
+imagen = "imagen.cli:main"
+imagen-mcp = "imagen.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
 include = [
-    "/imagencli",
+    "/imagen",
     "/skills",
 ]
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "/imagencli",
+    "/imagen",
     "/skills",
     "/tests",
     "/README.md",

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from imagencli.models.request import GenerateRequest
+from imagen.models.request import GenerateRequest
 
 
 def build_openrouter_payload(

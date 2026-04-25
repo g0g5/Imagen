@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from imagencli.models.request import GenerateRequest
-from imagencli.models.response import GenerateResponse
+from imagen.models.request import GenerateRequest
+from imagen.models.response import GenerateResponse
 
 
 class ImageProvider:

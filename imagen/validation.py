@@ -5,11 +5,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from pathlib import Path
 
-from imagencli.errors import ValidationError
-from imagencli.models.capabilities import get_model_capabilities
-from imagencli.models.request import GenerateRequest
-from imagencli.utils.mime import detect_mime_type, is_supported_image_mime_type
-from imagencli.utils.paths import normalize_path
+from imagen.errors import ValidationError
+from imagen.models.capabilities import get_model_capabilities
+from imagen.models.request import GenerateRequest
+from imagen.utils.mime import detect_mime_type, is_supported_image_mime_type
+from imagen.utils.paths import normalize_path
 
 
 def validate_prompt(prompt: str) -> str:

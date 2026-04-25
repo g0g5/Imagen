@@ -5,9 +5,9 @@ from pathlib import Path
 import pytest
 from fastmcp.exceptions import ToolError
 
-from imagencli import mcp_server
-from imagencli.constants import DEFAULT_MODEL
-from imagencli.errors import ValidationError
+from imagen import mcp_server
+from imagen.constants import DEFAULT_MODEL
+from imagen.errors import ValidationError
 
 
 def test_generate_image_returns_structured_result(

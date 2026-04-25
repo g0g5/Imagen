@@ -1,6 +1,6 @@
 """Package execution entrypoint."""
 
-from imagencli.cli import main
+from imagen.cli import main
 
 
 if __name__ == "__main__":

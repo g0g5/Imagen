@@ -1,4 +1,4 @@
-"""FastMCP server entrypoint for ImagenCLI."""
+"""FastMCP server entrypoint for Imagen."""
 
 from __future__ import annotations
 
@@ -7,10 +7,10 @@ from dataclasses import dataclass
 from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 
-from imagencli.constants import DEFAULT_MODEL
-from imagencli.errors import ImagenError
-from imagencli.services.generation import generate_and_save_images
-from imagencli.utils.output import format_saved_image_paths
+from imagen.constants import DEFAULT_MODEL
+from imagen.errors import ImagenError
+from imagen.services.generation import generate_and_save_images
+from imagen.utils.output import format_saved_image_paths
 
 
 @dataclass(frozen=True)
@@ -21,7 +21,7 @@ class GenerateImageResult:
 
 
 mcp = FastMCP(
-    "ImagenCLI",
+    "Imagen",
     mask_error_details=True,
     on_duplicate="error",
 )

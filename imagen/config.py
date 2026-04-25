@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from os import getenv
 
-from imagencli.errors import ConfigError
+from imagen.errors import ConfigError
 
 
 @dataclass(frozen=True)

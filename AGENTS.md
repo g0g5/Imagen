@@ -1,9 +1,9 @@
 ## Project Overview
-ImagenCLI is a Python 3.12 CLI package that validates image-generation inputs, calls OpenRouter image models via `requests`, and saves generated images locally.
+Imagen is a Python 3.12 CLI package that validates image-generation inputs, calls OpenRouter image models via `requests`, and saves generated images locally.
 
 ## Structure Map
-imagencli/
-|- imagencli/                 # Core application package for CLI flow and provider integration
+imagen/
+|- imagen/                 # Core application package for CLI flow and provider integration
 |  |- commands/               # CLI subcommands (`generate`, `auth` stub)
 |  |- models/                 # Typed request/response and model capability data
 |  |- providers/              # Provider interface and OpenRouter API implementation
@@ -22,5 +22,5 @@ imagencli/
 - Install CLI tool: `uv tool install .`
 - Sync dev environment: `uv sync --dev`
 - Run tests: `uv run pytest`
-- Run typecheck-level sanity check: `uv run python -m compileall imagencli tests`
-- Verify changes quickly: `uv run pytest && uv run python -m imagencli --help`
+- Run typecheck-level sanity check: `uv run python -m compileall imagen tests`
+- Verify changes quickly: `uv run pytest && uv run python -m imagen --help`

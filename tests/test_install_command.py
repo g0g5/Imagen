@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from imagencli.cli import main
-from imagencli.commands.install import run_install
+from imagen.cli import main
+from imagen.commands.install import run_install
 
 
 def test_run_install_copies_bundled_skill(
@@ -19,10 +19,10 @@ def test_run_install_copies_bundled_skill(
     target_root = tmp_path / "home" / ".claude" / "skills"
 
     monkeypatch.setattr(
-        "imagencli.commands.install.get_bundled_skill_dir", lambda: source_dir
+        "imagen.commands.install.get_bundled_skill_dir", lambda: source_dir
     )
     monkeypatch.setattr(
-        "imagencli.commands.install.get_claude_skills_dir", lambda: target_root
+        "imagen.commands.install.get_claude_skills_dir", lambda: target_root
     )
 
     exit_code = run_install(type("Args", (), {"skills": True})())
@@ -48,10 +48,10 @@ def test_run_install_overwrites_existing_skill_contents(
     (existing_dir / "SKILL.md").write_text("old contents\n", encoding="utf-8")
 
     monkeypatch.setattr(
-        "imagencli.commands.install.get_bundled_skill_dir", lambda: source_dir
+        "imagen.commands.install.get_bundled_skill_dir", lambda: source_dir
     )
     monkeypatch.setattr(
-        "imagencli.commands.install.get_claude_skills_dir", lambda: target_root
+        "imagen.commands.install.get_claude_skills_dir", lambda: target_root
     )
 
     exit_code = run_install(type("Args", (), {"skills": True})())
@@ -71,10 +71,10 @@ def test_main_install_succeeds_without_api_key(
 
     monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     monkeypatch.setattr(
-        "imagencli.commands.install.get_bundled_skill_dir", lambda: source_dir
+        "imagen.commands.install.get_bundled_skill_dir", lambda: source_dir
     )
     monkeypatch.setattr(
-        "imagencli.commands.install.get_claude_skills_dir", lambda: target_root
+        "imagen.commands.install.get_claude_skills_dir", lambda: target_root
     )
 
     exit_code = main(["install", "--skills"])
@@ -92,14 +92,14 @@ def test_main_install_returns_error_when_source_is_missing(
 
     monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     monkeypatch.setattr(
-        "imagencli.commands.install.get_bundled_skill_dir",
+        "imagen.commands.install.get_bundled_skill_dir",
         lambda: tmp_path / "missing" / "imagen-cli",
     )
     monkeypatch.setattr(
-        "imagencli.commands.install.get_claude_skills_dir",
+        "imagen.commands.install.get_claude_skills_dir",
         lambda: tmp_path / "home" / ".claude" / "skills",
     )
-    monkeypatch.setattr("imagencli.cli.stderr", stderr_buffer)
+    monkeypatch.setattr("imagen.cli.stderr", stderr_buffer)
 
     exit_code = main(["install", "--skills"])
 

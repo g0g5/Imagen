@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from imagencli.cli import parse_args
-from imagencli.constants import DEFAULT_MODEL
+from imagen.cli import parse_args
+from imagen.constants import DEFAULT_MODEL
 
 
 def test_parse_args_defaults_without_subcommand() -> None:

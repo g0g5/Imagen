@@ -5,9 +5,9 @@ from pathlib import Path
 import pytest
 import requests
 
-from imagencli.errors import ProviderError
-from imagencli.models.request import GenerateRequest
-from imagencli.providers.openrouter import OpenRouterProvider
+from imagen.errors import ProviderError
+from imagen.models.request import GenerateRequest
+from imagen.providers.openrouter import OpenRouterProvider
 
 
 class _FakeResponse:

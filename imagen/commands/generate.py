@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from argparse import Namespace
 
-from imagencli.services.generation import generate_and_save_images
-from imagencli.utils.output import format_saved_image_paths
+from imagen.services.generation import generate_and_save_images
+from imagen.utils.output import format_saved_image_paths
 
 
 def run_generate(args: Namespace) -> int:

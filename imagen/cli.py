@@ -6,11 +6,11 @@ from argparse import ArgumentParser, Namespace
 from collections.abc import Sequence
 from sys import argv as sys_argv, stderr
 
-from imagencli.commands.auth import run_auth
-from imagencli.commands.generate import run_generate
-from imagencli.commands.install import run_install
-from imagencli.constants import DEFAULT_MODEL
-from imagencli.errors import ImagenError
+from imagen.commands.auth import run_auth
+from imagen.commands.generate import run_generate
+from imagen.commands.install import run_install
+from imagen.constants import DEFAULT_MODEL
+from imagen.errors import ImagenError
 
 _KNOWN_COMMANDS = {"generate", "auth", "install"}
 

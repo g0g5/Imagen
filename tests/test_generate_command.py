@@ -4,14 +4,14 @@ from pathlib import Path
 
 import pytest
 
-from imagencli.cli import main
-from imagencli.commands.auth import run_auth
-from imagencli.commands import generate as generate_command
-from imagencli.config import load_config
-from imagencli.constants import DEFAULT_MODEL
-from imagencli.errors import ConfigError, ValidationError
-from imagencli.validation import build_generate_request
-from imagencli.validation import validate_ratio, validate_resolution
+from imagen.cli import main
+from imagen.commands.auth import run_auth
+from imagen.commands import generate as generate_command
+from imagen.config import load_config
+from imagen.constants import DEFAULT_MODEL
+from imagen.errors import ConfigError, ValidationError
+from imagen.validation import build_generate_request
+from imagen.validation import validate_ratio, validate_resolution
 
 
 def test_load_config_requires_api_key(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from imagencli.models.request import GenerateRequest
-from imagencli.services.payload_builder import build_openrouter_payload
+from imagen.models.request import GenerateRequest
+from imagen.services.payload_builder import build_openrouter_payload
 
 
 def test_build_payload_text_only_with_image_config() -> None:

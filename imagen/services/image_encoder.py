@@ -5,8 +5,8 @@ from __future__ import annotations
 import base64
 from pathlib import Path
 
-from imagencli.errors import ValidationError
-from imagencli.utils.mime import detect_mime_type
+from imagen.errors import ValidationError
+from imagen.utils.mime import detect_mime_type
 
 
 def encode_image_to_data_url(path: Path) -> str:

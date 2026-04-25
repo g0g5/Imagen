@@ -6,16 +6,16 @@ from dataclasses import dataclass
 
 import requests
 
-from imagencli.constants import OPENROUTER_CHAT_COMPLETIONS_URL
-from imagencli.errors import ProviderError, ResponseFormatError
-from imagencli.models.request import GenerateRequest
-from imagencli.models.response import GenerateResponse, GeneratedImage
-from imagencli.providers.base import ImageProvider
-from imagencli.services.image_encoder import encode_images_to_data_urls
-from imagencli.services.payload_builder import build_openrouter_payload
+from imagen.constants import OPENROUTER_CHAT_COMPLETIONS_URL
+from imagen.errors import ProviderError, ResponseFormatError
+from imagen.models.request import GenerateRequest
+from imagen.models.response import GenerateResponse, GeneratedImage
+from imagen.providers.base import ImageProvider
+from imagen.services.image_encoder import encode_images_to_data_urls
+from imagen.services.payload_builder import build_openrouter_payload
 
 _HTTP_TIMEOUT = (3.05, 120)
-_USER_AGENT = "imagen-cli/0.1.0"
+_USER_AGENT = "imagen/0.1.0"
 _OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models?output_modalities=image"
 
 

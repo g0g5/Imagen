@@ -5,7 +5,7 @@ from __future__ import annotations
 from mimetypes import guess_type
 from pathlib import Path
 
-from imagencli.constants import SUPPORTED_IMAGE_MIME_TYPES
+from imagen.constants import SUPPORTED_IMAGE_MIME_TYPES
 
 
 _MIME_TYPE_ALIASES = {

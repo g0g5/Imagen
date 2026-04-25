@@ -6,8 +6,8 @@ import shutil
 from argparse import Namespace
 from pathlib import Path
 
-from imagencli.errors import InstallError
-from imagencli.utils.paths import normalize_path
+from imagen.errors import InstallError
+from imagen.utils.paths import normalize_path
 
 
 def get_bundled_skill_dir() -> Path:

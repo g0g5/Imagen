@@ -5,10 +5,10 @@ from __future__ import annotations
 from collections.abc import Sequence
 from pathlib import Path
 
-from imagencli.config import load_config
-from imagencli.providers.openrouter import OpenRouterProvider
-from imagencli.services.image_saver import save_generated_images
-from imagencli.validation import build_generate_request
+from imagen.config import load_config
+from imagen.providers.openrouter import OpenRouterProvider
+from imagen.services.image_saver import save_generated_images
+from imagen.validation import build_generate_request
 
 
 def generate_and_save_images(

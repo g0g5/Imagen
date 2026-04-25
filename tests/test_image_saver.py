@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from imagencli.errors import ResponseFormatError
-from imagencli.models.response import GeneratedImage
-from imagencli.services.image_saver import save_generated_images
+from imagen.errors import ResponseFormatError
+from imagen.models.response import GeneratedImage
+from imagen.services.image_saver import save_generated_images
 
 
 def test_save_generated_images_writes_files(tmp_path: Path) -> None:

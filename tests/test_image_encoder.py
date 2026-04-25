@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from imagencli.errors import ValidationError
-from imagencli.services.image_encoder import encode_image_to_data_url
-from imagencli.utils import mime as mime_utils
+from imagen.errors import ValidationError
+from imagen.services.image_encoder import encode_image_to_data_url
+from imagen.utils import mime as mime_utils
 
 
 def test_encode_image_to_data_url_png(tmp_path: Path) -> None:
