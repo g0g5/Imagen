@@ -6,12 +6,13 @@ allowed-tools: Bash(imagen:*)
 
 # Imagen CLI
 
-Use `imagen` to generate images from a prompt, optionally with reference images.
+Use `imagen` to generate images from prompt text or a prompt file, optionally with reference images.
 
 ## Core usage
 
 ```bash
 imagen --prompt "A cinematic sunset over mountains"
+imagen --prompt-file ./prompt.txt
 imagen --prompt "Blend these references" --image ./a.png ./b.jpg
 imagen --prompt "A magazine cover photo" --ratio 4:5 --resolution 2K --output_dir ./outputs --model openai/gpt-image-1.5
 ```
@@ -19,7 +20,8 @@ imagen --prompt "A magazine cover photo" --ratio 4:5 --resolution 2K --output_di
 ## Parameters
 
 ```bash
---prompt "your prompt text"                 # required
+--prompt "your prompt text"                 # required unless --prompt-file is provided
+--prompt-file ./prompt.txt                   # optional, reads prompt from .txt or .json
 --image ./input.png ./reference.jpg         # optional, one or more files
 --model google/gemini-3.1-flash-image-preview
 --ratio 16:9
@@ -54,7 +56,9 @@ image/gif
 
 ## Validation
 
-The CLI rejects empty prompts, missing image files, unsupported image types, and invalid `--ratio` or `--resolution` values for the selected model.
+The CLI rejects empty prompts, empty prompt files, missing image files, unsupported image types, and invalid `--ratio` or `--resolution` values for the selected model.
+
+`--prompt-file` supports `.txt` and `.json` files only. Files are read as UTF-8 text, including `.json` files, and are not parsed or semantically validated. When `--prompt-file` is provided, it takes priority over `--prompt`.
 
 ## Output
 
@@ -77,6 +81,7 @@ imagen auth
 ## Agent tasks
 
 * **Generate from text**: `imagen --prompt ...`
+* **Generate from prompt file**: `imagen --prompt-file ./prompt.txt`
 * **Generate from references**: add `--image`
 * **Control shape and size**: add `--ratio` and `--resolution`
 * **Choose output folder**: add `--output_dir`
