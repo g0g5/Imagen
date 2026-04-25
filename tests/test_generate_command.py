@@ -6,6 +6,7 @@ import pytest
 
 from imagencli.cli import main
 from imagencli.commands.auth import run_auth
+from imagencli.commands import generate as generate_command
 from imagencli.config import load_config
 from imagencli.constants import DEFAULT_MODEL
 from imagencli.errors import ConfigError, ValidationError
@@ -28,6 +29,27 @@ def test_main_returns_error_for_missing_api_key(
     exit_code = main(["--prompt", "a cat"])
 
     assert exit_code == 1
+
+
+def test_main_generate_prints_saved_paths(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    saved_path = tmp_path / "imagen-test.png"
+
+    def fake_generate_and_save_images(**kwargs: object) -> list[Path]:
+        return [saved_path]
+
+    monkeypatch.setattr(
+        generate_command, "generate_and_save_images", fake_generate_and_save_images
+    )
+
+    exit_code = main(["--prompt", "a cat"])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert f"- {saved_path}" in captured.out
 
 
 def test_build_generate_request_rejects_missing_image_path(tmp_path: Path) -> None:

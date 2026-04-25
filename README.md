@@ -56,6 +56,34 @@ imagen install --skills
 
 `imagen auth` is currently a stub and does not store credentials yet. This MVP uses `OPENROUTER_API_KEY` only.
 
+## MCP Server
+
+`imagen-mcp` starts a FastMCP server over stdio and exposes one tool, `generate_image`.
+
+The tool uses the same options as the CLI:
+
+- `prompt` maps to `--prompt`
+- `image` maps to `--image`
+- `model` maps to `--model`
+- `ratio` maps to `--ratio`
+- `resolution` maps to `--resolution`
+- `output_dir` maps to `--output_dir`
+
+Example MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "imagen": {
+      "command": "imagen-mcp",
+      "env": {
+        "OPENROUTER_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
 ## Supported Values
 
 Aspect ratios:

@@ -9,6 +9,7 @@ description = "CLI for OpenRouter-based image generation"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastmcp==3.0.0",
     "requests>=2.32.0",
 ]
 
@@ -19,6 +20,7 @@ test = [
 
 [project.scripts]
 imagen = "imagencli.cli:main"
+imagen-mcp = "imagencli.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
 include = [
