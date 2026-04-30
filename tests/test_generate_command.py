@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import stat
 from pathlib import Path
 
 import pytest
 
+from imagen.auth_store import OPENROUTER_PROVIDER, save_api_key
 from imagen.cli import main
 from imagen.commands.auth import run_auth
 from imagen.commands import generate as generate_command
@@ -14,16 +16,44 @@ from imagen.validation import build_generate_request
 from imagen.validation import validate_ratio, validate_resolution
 
 
-def test_load_config_requires_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_load_config_requires_api_key(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path))
     monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
 
-    with pytest.raises(ConfigError, match="OPENROUTER_API_KEY is required"):
+    with pytest.raises(ConfigError, match="OpenRouter API key is required"):
         load_config()
 
 
+def test_load_config_uses_environment_when_no_saved_key(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("OPENROUTER_API_KEY", "env-secret")
+
+    config = load_config()
+
+    assert config.openrouter_api_key == "env-secret"
+
+
+def test_load_config_prefers_saved_key_over_environment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("OPENROUTER_API_KEY", "env-secret")
+    save_api_key(OPENROUTER_PROVIDER, "saved-secret")
+
+    config = load_config()
+
+    assert config.openrouter_api_key == "saved-secret"
+
+
 def test_main_returns_error_for_missing_api_key(
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path))
     monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
 
     exit_code = main(["--prompt", "a cat"])
@@ -183,10 +213,26 @@ def test_validate_resolution_rejects_extended_value_for_other_models() -> None:
         validate_resolution("openai/unknown-model", "0.5K")
 
 
-def test_run_auth_prints_stub_message(capsys: pytest.CaptureFixture[str]) -> None:
+def test_run_auth_saves_encrypted_key(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path))
+    inputs = iter(["1", "stored-secret"])
+    monkeypatch.setattr("builtins.input", lambda _prompt: next(inputs))
+
     exit_code = run_auth()
 
     captured = capsys.readouterr()
+    config_dir = tmp_path / ".config" / "imagen"
+    keys_file = config_dir / "keys"
+    encryption_key_file = config_dir / ".encryption_key"
+
     assert exit_code == 0
-    assert "not implemented yet" in captured.out
-    assert "OPENROUTER_API_KEY" in captured.out
+    assert "Saved OpenRouter.ai API key" in captured.out
+    assert keys_file.exists()
+    assert encryption_key_file.exists()
+    assert b"stored-secret" not in keys_file.read_bytes()
+    assert stat.S_IMODE(config_dir.stat().st_mode) == 0o700
+    assert stat.S_IMODE(keys_file.stat().st_mode) == 0o600
+    assert stat.S_IMODE(encryption_key_file.stat().st_mode) == 0o600
+    assert load_config().openrouter_api_key == "stored-secret"

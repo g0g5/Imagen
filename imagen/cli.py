@@ -32,7 +32,7 @@ def build_parser() -> ArgumentParser:
     generate_parser.add_argument("--resolution")
     generate_parser.add_argument("--output_dir", default="./outputs")
 
-    subparsers.add_parser("auth", help="Manage provider authentication (stub)")
+    subparsers.add_parser("auth", help="Store provider API keys")
 
     install_parser = subparsers.add_parser(
         "install", help="Install local integrations such as Claude skills"

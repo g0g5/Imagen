@@ -16,7 +16,16 @@ uv sync --dev
 
 ## Authentication
 
-Set your OpenRouter API key in the environment before running commands.
+Run the auth command and follow the prompts to store your OpenRouter API key:
+
+```bash
+imagen auth
+```
+
+The key is encrypted and saved in `~/.config/imagen/keys`. Credentials saved
+with `imagen auth` take priority over environment variables.
+
+You can also set your OpenRouter API key in the environment as a fallback.
 
 ```bash
 export OPENROUTER_API_KEY="your_api_key_here"
@@ -48,7 +57,7 @@ Image-to-image with multiple inputs:
 imagen --prompt "Blend these references" --image "./a.png" "./b.jpg" --ratio 16:9 --resolution 2K --output_dir ./outputs
 ```
 
-Auth stub command:
+Store or update your OpenRouter API key:
 
 ```bash
 imagen auth
@@ -60,7 +69,7 @@ Install the bundled Claude skill:
 imagen install --skills
 ```
 
-`imagen auth` is currently a stub and does not store credentials yet. This MVP uses `OPENROUTER_API_KEY` only.
+`imagen auth` currently supports OpenRouter.ai.
 
 ## MCP Server
 
@@ -81,7 +90,10 @@ text, including `.json` files, and are not parsed or semantically validated.
 When `prompt_file` is provided, it takes priority over `prompt`. Prompt file
 content must be non-empty.
 
-Example MCP client configuration:
+The MCP server uses the same saved credentials as the CLI. If no saved key is
+available, it falls back to `OPENROUTER_API_KEY`.
+
+Example MCP client configuration when using an environment variable:
 
 ```json
 {
